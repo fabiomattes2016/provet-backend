@@ -16,32 +16,51 @@ import {
   Public,
 } from 'src/common/decorators';
 import { ResponseCadastro } from './types/cadastro.type';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiNoContentResponse,
+} from '@nestjs/swagger';
+import { CadastroDto } from './dto/cadastro.dto';
+import { TokensDto } from './dto';
 
+@ApiTags('Autenticação')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
+  @ApiCreatedResponse({ type: CadastroDto })
   @Post('/novo')
   @HttpCode(HttpStatus.CREATED)
-  signupLocal(@Body() dto: AuthDto): Promise<ResponseCadastro> {
+  signupLocal(@Body() dto: CadastroDto): Promise<ResponseCadastro> {
     return this.authService.signupLocal(dto);
   }
 
   @Public()
+  @ApiOkResponse({
+    type: TokensDto,
+  })
   @Post('/login')
   @HttpCode(HttpStatus.OK)
   signinLocal(@Body() dto: AuthDto): Promise<Tokens> {
     return this.authService.signinLocal(dto);
   }
 
+  @ApiBearerAuth()
+  @ApiNoContentResponse({ description: 'No Content' })
   @Post('/logout')
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   logout(@GetCurrentUserId() userId: number) {
     return this.authService.logout(userId);
   }
 
   @Public()
+  @ApiOkResponse({
+    type: TokensDto,
+  })
   @UseGuards(RtGuard)
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)

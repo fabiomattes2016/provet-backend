@@ -1,21 +1,19 @@
-import { IsEmail, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class AuthDto {
-  @IsNotEmpty({ message: 'Campo e-mail não pode ser vazio' })
-  nome: string;
-
+  @ApiProperty({
+    description: 'O e-mail cadastrado no sistema',
+    example: 'email@email.com',
+  })
   @IsNotEmpty({ message: 'Campo e-mail não pode ser vazio' })
   @IsEmail({}, { message: 'Digite um e-mail válido' })
   email: string;
 
+  @ApiProperty({
+    description: 'A senha cadastrada no sistema',
+    example: 'senha-segura',
+  })
   @IsNotEmpty({ message: 'Campo senha não pode ser vazio' })
   password: string;
-
-  @IsNumber({}, { message: 'Digite um Id de Cliente válido' })
-  @IsNotEmpty({ message: 'O Campo Ide Cliente é obrigatório' })
-  clienteId: number;
-
-  @IsNumber({}, { message: 'Digite um Id de Perfil válido' })
-  @IsNotEmpty({ message: 'O Campo Ide Perfil é obrigatório' })
-  perfilId: number;
 }

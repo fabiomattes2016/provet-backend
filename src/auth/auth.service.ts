@@ -5,12 +5,13 @@ import { PrismaService } from './../prisma/prisma.service';
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { CadastroDto } from './dto/cadastro.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-  async signupLocal(dto: AuthDto): Promise<ResponseCadastro> {
+  async signupLocal(dto: CadastroDto): Promise<ResponseCadastro> {
     const hash = await this.hashData(dto.password);
 
     await this.prisma.usuario.create({
